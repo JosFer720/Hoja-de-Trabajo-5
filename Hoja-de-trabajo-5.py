@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 
 RANDOM_SEED = 42
 MEMORIA_RAM = 100  
-VELOCIDAD_CPU = 6
+VELOCIDAD_CPU = 3  
 
 class Proceso:
     def __init__(self, env, nombre, memoria, instrucciones_totales):
@@ -37,12 +37,12 @@ class Proceso:
                     yield req
                     return (yield from self.run(cpu, ram))
 
-def llegada_proceso(env, cpu, ram, procesos, intervalo):
+def llegada_proceso(env, cpus, ram, procesos, intervalo):
     for i in range(procesos):
         instrucciones_totales = random.randint(1, 10)
         memoria_necesaria = random.randint(1, 10)
         proceso = Proceso(env, f"Proceso {i+1}", memoria_necesaria, instrucciones_totales)
-        env.process(proceso.run(cpu, ram))
+        env.process(proceso.run(cpus, ram)) 
         yield env.timeout(intervalo)  
 
 def ejecutar_simulacion(procesos_lista, intervalo):
@@ -52,8 +52,8 @@ def ejecutar_simulacion(procesos_lista, intervalo):
         for _ in range(10):  
             env = simpy.Environment()
             ram = simpy.Container(env, init=MEMORIA_RAM, capacity=MEMORIA_RAM)
-            cpu = simpy.Resource(env, capacity=1)
-            env.process(llegada_proceso(env, cpu, ram, procesos, intervalo))
+            cpus = simpy.Resource(env, capacity=2)
+            env.process(llegada_proceso(env, cpus, ram, procesos, intervalo))
             env.run()
             tiempos.append(env.now)
         tiempo_promedio = statistics.mean(tiempos)
@@ -66,7 +66,7 @@ def graficar(procesos_lista, tiempos_promedio, intervalo):
     plt.plot(procesos_lista, tiempos_promedio, marker='o')
     plt.xlabel('Cantidad de Procesos')
     plt.ylabel('Tiempo Promedio')
-    plt.title(f'Cantidad de Procesos vs Tiempo Promedio (Intervalo = {intervalo} y CPU = 6)')
+    plt.title(f'Cantidad de Procesos vs Tiempo Promedio (Intervalo = {intervalo})')
     plt.grid(True)
     plt.show()
 
