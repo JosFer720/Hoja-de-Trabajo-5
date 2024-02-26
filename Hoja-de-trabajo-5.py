@@ -4,8 +4,8 @@ import statistics
 import matplotlib.pyplot as plt
 
 RANDOM_SEED = 42
-MEMORIA_RAM = 200
-VELOCIDAD_CPU = 3  
+MEMORIA_RAM = 100  
+VELOCIDAD_CPU = 6
 
 class Proceso:
     def __init__(self, env, nombre, memoria, instrucciones_totales):
@@ -66,7 +66,7 @@ def graficar(procesos_lista, tiempos_promedio, intervalo):
     plt.plot(procesos_lista, tiempos_promedio, marker='o')
     plt.xlabel('Cantidad de Procesos')
     plt.ylabel('Tiempo Promedio')
-    plt.title(f'Cantidad de Procesos vs Tiempo Promedio (Intervalo = {intervalo} y memoria 200)')
+    plt.title(f'Cantidad de Procesos vs Tiempo Promedio (Intervalo = {intervalo} y CPU = 6)')
     plt.grid(True)
     plt.show()
 
